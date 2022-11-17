@@ -1,0 +1,10 @@
+# 16-char cmds
+
+"AK_CMDS": 
+
+  {
+    "VIS_START": "start_visualizat",
+    "VIS_STOP": "stop_visualizati",
+    "TRIAL_START": "start_trialxxxxx",
+    "TRIAL_STOP": "stop_trialxxxxxx"
+  }

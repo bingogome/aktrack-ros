@@ -1,0 +1,6 @@
+<launch>
+    <node name="node_comm_end" pkg="aktrack_ros_comm" type="node_comm_end" output="screen"/>
+    <node name="node_ak_comm_in" pkg="aktrack_ros_comm" type="node_ak_comm_in" output="screen"/>
+    <node name="node_ak_comm_out" pkg="aktrack_ros_comm" type="node_ak_comm_out" output="screen"/>
+    <node name="node_ak_comm_hif_out" pkg="aktrack_ros_comm" type="node_ak_comm_hif_out" output="screen"/>
+</launch>

@@ -1,0 +1,15 @@
+# ("\n" next line char cannot be typed in command line if you want to test using rostopic pub ........ )
+CMDS_EOM: ";" # note: Change it to something else for testing in command line 
+
+CONNECT: 1 # ROS1 connection flag
+
+PORT_OUT_AK: 8059 # Port number for data stream out from ROS
+PORT_IN_AK: 8057 # Port number for data stream into ROS
+PORT_OUT_NNBLC_AK: 8083 # Port number for data stream out from ROS in high frequency
+MSG_END_AK: "_msg_end__" # communication messege starts with this means end the port
+MSG_SIZE_AK: 256 # change the ros_side_in.hpp and ros_side_out.hpp {boost::array<char, ...> recv_buffer_} field when chaning this number
+PUBLISHER_NAME_AK: "/AK/msg_received" # Messege ROS publisher name (ROSSideIn received)
+SUBSCRIBER_NAME_AK: "/AK/msg_to_send" # Messege ROS subscriber name (ROSSideOut to send)
+SUBSCRIBER_HIF_NAME_AK: "/AK/msg_to_send_hi_f" # Messege ROS subscriber name (ROSSideOut to send at high frequency)
+VERBOSE_AK: 1
+VERBOSE_HIF_AK: 0

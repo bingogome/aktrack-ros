@@ -1,0 +1,4 @@
+
+<launch>
+    <node name="node_decode_ak" pkg="aktrack_ros_comm_decode" type="node_decode_ak" output="screen"/>
+</launch>
