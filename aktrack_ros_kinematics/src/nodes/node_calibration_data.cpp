@@ -63,36 +63,6 @@ private:
 
     ros::NodeHandle& n_;
     PubMap& pubs_;
-    
-    ros::Subscriber sub_reinit = n_.subscribe(
-        "/Kinematics/Query_ReInit", 2, &MngrCalibrationData::ReInitCallback, this);
-    ros::Subscriber sub_updateoffset = n_.subscribe(
-        "/Kinematics/Update_TR_cntct_offset", 2, &MngrCalibrationData::ChangeOffsetCallBack, this);
-    ros::Subscriber sub_reinitoffset = n_.subscribe(
-        "/Kinematics/Reinit_TR_cntct_offset", 2, &MngrCalibrationData::ReinitOffsetCallBack, this);
-
-    void ReInitCallback(const std_msgs::String::ConstPtr& msg)
-    {
-        if(!msg->data.compare("_reinit__")==0) return;
-        for (PubMap::iterator it = pubs_.begin(); it != pubs_.end(); it++)
-        {
-            ReadAndPublishCalibrations(it->first, pubs_);
-        }
-    }
-    
-    void ChangeOffsetCallBack(const geometry_msgs::Pose::ConstPtr& msg)
-    {
-        geometry_msgs::Pose out;
-        out.position = msg->position;
-        out.orientation = msg->orientation;
-        pubs_["cntct_offset"].publish(out);
-    }
-
-    void ReinitOffsetCallBack(const std_msgs::String::ConstPtr& msg)
-    {
-        if(!msg->data.compare("_reinitoffset__")==0) return;
-        ReadAndPublishCalibrations("cntct_offset", pubs_);
-    }
 };
 
 int main(int argc, char **argv)
@@ -100,14 +70,14 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "NodeCalibrationData");
     ros::NodeHandle nh;
 
-    ros::Publisher pub_cntct_offset = nh.advertise<geometry_msgs::Pose>(
-        "/AK/Kinematics/TR_cntct_offset", 1, true);
-    ros::Publisher pub_tracker_tip = nh.advertise<geometry_msgs::Pose>(
-        "/AK/Kinematics/TR_cntct_offset", 1, true);
+    ros::Publisher pub_sticker_panelref = nh.advertise<geometry_msgs::Pose>(
+        "/AK/Kinematics/TR_sticker_panelref", 1, true);
+    ros::Publisher pub_trackerref_trackercent = nh.advertise<geometry_msgs::Pose>(
+        "/AK/Kinematics/TR_trackerref_trackercent", 1, true);
 
     PubMap pubs;
-    pubs["cntct_offset"] = pub_cntct_offset;
-    pubs["tracker_tip"] = pub_tracker_tip;
+    pubs["sticker_panelref"] = pub_sticker_panelref;
+    pubs["trackerref_trackercent"] = pub_trackerref_trackercent;
 
     MngrCalibrationData mngr(nh, pubs);
 
