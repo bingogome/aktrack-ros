@@ -36,11 +36,38 @@ Dispatcher::Dispatcher(ros::NodeHandle& n)
     : n_(n)
 {}
 
-void Dispatcher::VisualizationCallBack(const std_msgs::Int16::ConstPtr& msg)
+void Dispatcher::VisualizationCallBack(const std_msgs::String::ConstPtr& msg)
 {
+    std_msgs::String msg_out;
+    if(msg->data.compare("_start__")==0) 
+    {
+        // Poke node_viz_tr_body_tool
+        msg_out.data = "_start__";
+        pub_flag_viz_.publish(msg_out);
+    }
+    else if(msg->data.compare("_end__")==0) 
+    {
+        // Poke node_viz_tr_body_tool
+        msg_out.data = "_end__";
+        pub_flag_viz_.publish(msg_out);
+    }
+    
 }
 
-void Dispatcher::TrialsCallBack(const std_msgs::Float32MultiArray::ConstPtr& msg)
+void Dispatcher::TrialsCallBack(const std_msgs::String::ConstPtr& msg)
 {
+    std_msgs::String msg_out;
+    if(s.rfind("_start__", 0) == 0) 
+    {
+        // Poke node_viz_tr_body_tool
+        msg_out.data = msg->data.substr(8);
+        pub_flag_trial_.publish(msg_out);
+    }
+    else if(msg->data.compare("_end__")==0) 
+    {
+        // Poke node_viz_tr_body_tool
+        msg_out.data = "_end__";
+        pub_flag_trial_.publish(msg_out);
+    }
 }
 

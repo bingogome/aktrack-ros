@@ -23,43 +23,17 @@ SOFTWARE.
 ***/
 
 #pragma once
+#include <geometry_msgs/Pose.h>
+#include <geometry_msgs/TransformStamped.h>
+#include <tf2/LinearMath/Transform.h>
+#include "aktrack_ros_msgs/PoseValid.h"
 
-#include <ros/ros.h>
-#include <std_msgs/String.h>
+tf2::Transform ConvertToTf2Transform(const geometry_msgs::PoseConstPtr tr);
 
-#include "dispatcher_utility.hpp"
+tf2::Transform ConvertToTf2Transform(const aktrack_ros_msgs::PoseValidConstPtr tr);
 
-class Dispatcher
-{
+tf2::Transform ConvertToTf2Transform(const geometry_msgs::TransformStampedConstPtr tr);
 
-public:
+tf2::Vector3 ConvertToTf2Vector3(const geometry_msgs::PointConstPtr t);
 
-    Dispatcher(ros::NodeHandle& n);
-
-private:
-
-    ros::NodeHandle& n_;
-
-    // Dispatcher receiving query signals
-    ros::Subscriber sub_ak_vis_ = n_.subscribe(
-        "/AK/Vis", 2, &Dispatcher::VisualizationCallBack, this);
-    ros::Subscriber sub_ak_trial_ = n_.subscribe(
-        "/AK/Trial", 2, &Dispatcher::TrialsCallBack, this);
-
-    // Dispatcher sending query response signals
-    ros::Publisher pub_ak_comm_ = n_.advertise<std_msgs::String>(
-        "/AK/msg_to_send", 2);
-    ros::Publisher pub_ak_commhif_ = n_.advertise<std_msgs::String>(
-        "/AK/msg_to_send_hi_f", 2);
-        
-    // Dispatcher sending query
-    ros::Publisher pub_flag_trial_ = n_.advertise<std_msgs::String>(
-        "/AK/Kinematics/Flag_trial", 2);
-    ros::Publisher pub_flag_viz_ = n_.advertise<std_msgs::String>(
-        "/AK/Kinematics/Flag_viz", 2);
-
-    void VisualizationCallBack(const std_msgs::String::ConstPtr& msg);
-
-    void TrialsCallBack(const std_msgs::String::ConstPtr& msg);
-
-};
+geometry_msgs::Pose ConvertToGeometryPose(const tf2::Transform tr);
