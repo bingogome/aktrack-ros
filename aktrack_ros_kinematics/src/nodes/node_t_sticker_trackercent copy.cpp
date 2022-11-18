@@ -31,26 +31,26 @@ SOFTWARE.
 
 #include "transform_conversions.hpp"
 
-class MngrTBodyrefPtrtip
+class MngrTStickerTrackercent
 {
 // Manages the flag of running the calculation of the transform
 public:
     
-    MngrTBodyrefPtrtip(ros::NodeHandle& n) : n_(n){}
+    MngrTStickerTrackercent(ros::NodeHandle& n) : n_(n){}
     bool run_flag = false;
 
-    tf2::Transform tr_pol_bodyref_;
-    tf2::Transform tr_pol_ptr_;
+    tf2::Transform tr_pol_panelref_;
+    tf2::Transform tr_pol_tracker_;
 
 private:
 
     ros::NodeHandle& n_;
     ros::Subscriber sub_run_ = n_.subscribe(
-        "/Kinematics/Flag_bodyref_ptrtip", 2, &MngrTBodyrefPtrtip::FlagCallBack, this);
-    ros::Subscriber sub_tr_pol_bodyref_ = n_.subscribe(
-        "/NDI/HeadRef/local/measured_cp", 2, &MngrTBodyrefPtrtip::PolBodyRefCallBack, this);
-    ros::Subscriber sub_tr_pol_ptr_ = n_.subscribe(
-        "/NDI/PointerNew/local/measured_cp", 2, &MngrTBodyrefPtrtip::PolPtrCallBack, this);
+        "/AK/Kinematics/Flag_trial", 2, &MngrTBodyrefPtrtip::FlagCallBack, this);
+    ros::Subscriber sub_tr_pol_panelref_ = n_.subscribe(
+        "/NDI/PanelRef/local/measured_cp", 2, &MngrTBodyrefPtrtip::PolPanelRefCallBack, this);
+    ros::Subscriber sub_tr_pol_tracker_ = n_.subscribe(
+        "/NDI/AtKnssRef/local/measured_cp", 2, &MngrTBodyrefPtrtip::PolTrackerCallBack, this);
 
     void FlagCallBack(const std_msgs::String::ConstPtr& msg)
     {
@@ -58,21 +58,21 @@ private:
         if(msg->data.compare("_end__")==0) run_flag = false;
     }
 
-    void PolBodyRefCallBack(const geometry_msgs::TransformStamped::ConstPtr& msg)
+    void PolPanelRefCallBack(const geometry_msgs::TransformStamped::ConstPtr& msg)
     {
-        if(run_flag) tr_pol_bodyref_ = ConvertToTf2Transform(msg);
+        if(run_flag) tr_pol_panelref_ = ConvertToTf2Transform(msg);
     }
 
-    void PolPtrCallBack(const geometry_msgs::TransformStamped::ConstPtr& msg)
+    void PolTrackerCallBack(const geometry_msgs::TransformStamped::ConstPtr& msg)
     {
-        if(run_flag) tr_pol_ptr_ = ConvertToTf2Transform(msg);
+        if(run_flag) tr_pol_tracker_ = ConvertToTf2Transform(msg);
     }
 };
 
 int main(int argc, char **argv)
 {
     // ROS stuff
-    ros::init(argc, argv, "NodeOpttrackerTrBodyrefPtrtip");
+    ros::init(argc, argv, "NodeDataacTStickerTracker");
     ros::NodeHandle nh;
     ros::Rate rate(50.0);
 
@@ -80,8 +80,10 @@ int main(int argc, char **argv)
     MngrTBodyrefPtrtip mngr1(nh);
 
     // Initialize the requred transforms
-    geometry_msgs::PoseConstPtr tr_ptr_ptrtip = ros::topic::waitForMessage<geometry_msgs::Pose>(
-        "/Kinematics/TR_ptr_ptrtip");
+    geometry_msgs::PoseConstPtr tr_sticker_panelref = ros::topic::waitForMessage<geometry_msgs::Pose>(
+        "/AK/Kinematics/TR_sticker_panelref");
+    geometry_msgs::PoseConstPtr tr_trackerref_trackercent = ros::topic::waitForMessage<geometry_msgs::Pose>(
+        "/AK/Kinematics/TR_trackerref_trackercent");
 
     // Initialize the tf2 intermediate variables
     tf2::Transform tr_pol_bodyref_;
