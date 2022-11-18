@@ -33,22 +33,6 @@ SOFTWARE.
 #include "function_map_ak.hpp"
 #include "decode_node.hpp"
 
-std::vector<double> SubStringTokenize2Double(std::string s, std::string del = "_")
-{   
-    std::vector<double> ans;
-    int start = 0;
-    int end = s.find(del);
-    while (end != -1) {
-        ans.push_back(
-            std::stod(s.substr(start, end - start)));
-        start = end + del.size();
-        end = s.find(del, start);
-    }
-    ans.push_back(
-        std::stod(s.substr(start, end - start)));
-    return ans;
-}
-
 /**
 * This maps the functions to the received cmd.
 */
@@ -98,7 +82,7 @@ void TrialStart(std::string& ss, PublisherVec& pubs)
 {
     // pubs[1] is the publisher /AK/Trial
     std_msgs::String msg;
-    msg.data = "_start__" + ss;
+    msg.data = "start" + ss;
     pubs[1].publish(msg);
 }
 

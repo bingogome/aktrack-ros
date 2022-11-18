@@ -86,8 +86,9 @@ int main(int argc, char **argv)
     tf2::Transform tr_sticker_trackercent_;
 
     // Initialize the result variable and its publisher
-    geometry_msgs::Pose t_sticker_trackercent;
-    ros::Publisher pub_sticker_trackercent = nh.advertise<geometry_msgs::Point>(
+    geometry_msgs::Pose tr_sticker_trackercent;
+    geometry_msgs::PointStamped t_sticker_trackercent;
+    ros::Publisher pub_sticker_trackercent = nh.advertise<geometry_msgs::PointStamped>(
         "/AK/Kinematics/T_sticker_trackercent", 10);
 
     mngr1.run_flag = True;
@@ -102,9 +103,9 @@ int main(int argc, char **argv)
             tr_sticker_trackercent_ = 
                 tr_sticker_panelref_ * tr_pol_panelref_.inverse() 
                 * tr_pol_trackerref_ * tr_trackerref_trackercent_;
-            t_sticker_trackercent = ConvertToGeometryPose(tr_sticker_trackercent_);
-            
-            pub_bodyref_ptrtip.publish(t_sticker_trackercent.position);
+            tr_sticker_trackercent = ConvertToGeometryPose(tr_sticker_trackercent_);
+            t_sticker_trackercent.point = tr_sticker_trackercent.position;
+            pub_bodyref_ptrtip.publish();
         }
         ros::spinOnce();
         rate.sleep();
