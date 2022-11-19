@@ -27,6 +27,7 @@ SOFTWARE.
 #include <fstream>
 
 #include <ros/ros.h>
+#include <ros/package.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/PointStamped.h>
@@ -119,7 +120,8 @@ private:
         {
             double start_time = v_data_sticker_strackercent_[0].header.stamp.toSec();
             std::ofstream f;
-            f.open(timestamp_ + "_" + subjname_ + "_" + trialname_ + ".csv");
+            std::string packpath = ros::package::getPath("aktrack_ros");
+            f.open(packpath + "/recordeddata/" + timestamp_ + "_" + subjname_ + "_" + trialname_ + ".csv");
             for (int i=0; i<v_data_sticker_strackercent_.size(); i++)
             {
                 f << 
