@@ -26,11 +26,8 @@ SOFTWARE.
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <tf2/LinearMath/Transform.h>
-#include "aktrack_ros_msgs/PoseValid.h"
 
 tf2::Transform ConvertToTf2Transform(const geometry_msgs::PoseConstPtr tr);
-
-tf2::Transform ConvertToTf2Transform(const aktrack_ros_msgs::PoseValidConstPtr tr);
 
 tf2::Transform ConvertToTf2Transform(const geometry_msgs::TransformStampedConstPtr tr);
 

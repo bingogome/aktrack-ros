@@ -29,6 +29,8 @@ SOFTWARE.
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/Point.h>
+#include <geometry_msgs/PointStamped.h>
+#include "ros_print_color.hpp"
 
 std::vector<std::string> SubString(std::string s, std::string del = "_")
 {   
@@ -36,8 +38,7 @@ std::vector<std::string> SubString(std::string s, std::string del = "_")
     int start = 0;
     int end = s.find(del);
     while (end != -1) {
-        ans.push_back(
-            std::stod(s.substr(start, end - start)));
+        ans.push_back(s.substr(start, end - start));
         start = end + del.size();
         end = s.find(del, start);
     }
@@ -85,6 +86,7 @@ private:
             run_flag_ = false;
             SaveAcquiredData();
             v_data_sticker_strackercent_.clear();
+            ROS_GREEN_STREAM("[AKTRACK INFO] Data recording started."); 
         }
         else if (v_subjtimetrial.size()==3)
         {
@@ -95,15 +97,16 @@ private:
                 subjname_ = v_subjtimetrial[1];
                 trialname_ = v_subjtimetrial[2];
                 run_flag_ = true;
+                ROS_GREEN_STREAM("[AKTRACK INFO] Data recording ended."); 
             }
         }
     }
 
     void StickerTrackercentCallBack(const geometry_msgs::PointStamped::ConstPtr& msg)
     {
-        if (mngr1.run_flag_)
+        if (run_flag_)
         {
-            geometry_msgs::PoseStamped t_sticker_trackercent;
+            geometry_msgs::PointStamped t_sticker_trackercent;
             t_sticker_trackercent.header = msg->header;
             t_sticker_trackercent.point = msg->point;
             v_data_sticker_strackercent_.push_back(t_sticker_trackercent);
@@ -116,17 +119,18 @@ private:
         {
             double start_time = v_data_sticker_strackercent_[0].header.stamp.toSec();
             std::ofstream f;
-            f.open(timestamp_+"_"+subjname_+"_"+trialname_".csv");
+            f.open(timestamp_ + "_" + subjname_ + "_" + trialname_ + ".csv");
             for (int i=0; i<v_data_sticker_strackercent_.size(); i++)
             {
                 f << 
-                    v_data_sticker_strackercent_[i].header.stamp.toSec()-start_time 
-                    << "," << v_data_sticker_strackercent_[i].point.x 
-                    << "," << v_data_sticker_strackercent_[i].point.y 
-                    << "," << v_data_sticker_strackercent_[i].point.z
+                    std::to_string(v_data_sticker_strackercent_[i].header.stamp.toSec()-start_time)
+                    << "," << std::to_string(v_data_sticker_strackercent_[i].point.x) 
+                    << "," << std::to_string(v_data_sticker_strackercent_[i].point.y) 
+                    << "," << std::to_string(v_data_sticker_strackercent_[i].point.z)
                     << "\n";
             }
-            myfile.close();
+            f.close();
+            ROS_GREEN_STREAM("[AKTRACK INFO] Recorded data saved."); 
         }
     }
 };

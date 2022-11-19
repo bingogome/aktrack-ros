@@ -25,6 +25,7 @@ SOFTWARE.
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/Point.h>
+#include <geometry_msgs/PointStamped.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <tf2/LinearMath/Transform.h>
@@ -45,9 +46,9 @@ private:
 
     ros::NodeHandle& n_;
     ros::Subscriber sub_tr_pol_panelref_ = n_.subscribe(
-        "/NDI/PanelRef/local/measured_cp", 2, &MngrTBodyrefPtrtip::PolPanelRefCallBack, this);
+        "/NDI/PanelRef/local/measured_cp", 2, &MngrTStickerTrackercent::PolPanelRefCallBack, this);
     ros::Subscriber sub_tr_pol_trackerref_ = n_.subscribe(
-        "/NDI/AtKnssRef/local/measured_cp", 2, &MngrTBodyrefPtrtip::PolTrackerCallBack, this);
+        "/NDI/AtKnssRef/local/measured_cp", 2, &MngrTStickerTrackercent::PolTrackerCallBack, this);
 
     void PolPanelRefCallBack(const geometry_msgs::TransformStamped::ConstPtr& msg)
     {
@@ -68,7 +69,7 @@ int main(int argc, char **argv)
     ros::Rate rate(50.0);
 
     // Instantiate the flag manager
-    MngrTBodyrefPtrtip mngr1(nh);
+    MngrTStickerTrackercent mngr1(nh);
 
     // Initialize the requred transforms
     geometry_msgs::PoseConstPtr tr_sticker_panelref = ros::topic::waitForMessage<geometry_msgs::Pose>(
@@ -91,7 +92,7 @@ int main(int argc, char **argv)
     ros::Publisher pub_sticker_trackercent = nh.advertise<geometry_msgs::PointStamped>(
         "/AK/Kinematics/T_sticker_trackercent", 10);
 
-    mngr1.run_flag = True;
+    mngr1.run_flag = true;
     // Go in the loop, with the flag indicating wether do the calculation or not
     while (nh.ok())
     {
@@ -105,7 +106,7 @@ int main(int argc, char **argv)
                 * tr_pol_trackerref_ * tr_trackerref_trackercent_;
             tr_sticker_trackercent = ConvertToGeometryPose(tr_sticker_trackercent_);
             t_sticker_trackercent.point = tr_sticker_trackercent.position;
-            pub_bodyref_ptrtip.publish();
+            pub_sticker_trackercent.publish(t_sticker_trackercent);
         }
         ros::spinOnce();
         rate.sleep();

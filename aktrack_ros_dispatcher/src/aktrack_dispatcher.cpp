@@ -57,7 +57,7 @@ void Dispatcher::VisualizationCallBack(const std_msgs::String::ConstPtr& msg)
 void Dispatcher::TrialsCallBack(const std_msgs::String::ConstPtr& msg)
 {
     std_msgs::String msg_out;
-    if(s.rfind("start", 0) == 0) 
+    if(msg->data.rfind("start", 0) == 0) 
     {
         // Poke node_viz_tr_body_tool
         msg_out.data = msg->data.substr(5);

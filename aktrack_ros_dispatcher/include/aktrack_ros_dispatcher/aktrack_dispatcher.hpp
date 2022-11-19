@@ -49,8 +49,6 @@ private:
     // Dispatcher sending query response signals
     ros::Publisher pub_ak_comm_ = n_.advertise<std_msgs::String>(
         "/AK/msg_to_send", 2);
-    ros::Publisher pub_ak_commhif_ = n_.advertise<std_msgs::String>(
-        "/AK/msg_to_send_hi_f", 2);
         
     // Dispatcher sending query
     ros::Publisher pub_flag_trial_ = n_.advertise<std_msgs::String>(

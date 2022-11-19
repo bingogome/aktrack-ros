@@ -29,6 +29,8 @@ SOFTWARE.
 #include <geometry_msgs/Pose.h>
 #include <std_msgs/String.h>
 
+#include "ros_print_color.hpp"
+
 typedef std::map<std::string, ros::Publisher> PubMap;
 
 void ReadAndPublishCalibrations(std::string tr_str, PubMap pubs)
@@ -85,6 +87,8 @@ int main(int argc, char **argv)
     {
         ReadAndPublishCalibrations(it->first, pubs);
     }
+
+    ROS_GREEN_STREAM("[AKTRACK INFO] Calibration data published."); 
 
     ros::spin();
     return 0;
