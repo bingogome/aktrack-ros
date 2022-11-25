@@ -73,9 +73,9 @@ private:
         if (run_flag_)
         {
             std_msgs::String msg_out;
-            msg_out.data = "__msg_pose_" + // convert m to mm
-                std::to_string(msg->point.x * 1000.0) + "_" +
-                std::to_string(msg->point.y * 1000.0);
+            msg_out.data = "__msg_pose_" + // convert m to mm and convert to RAS coordinates
+                std::to_string(-msg->point.x * 1000.0) + "_" +
+                std::to_string(-msg->point.y * 1000.0);
             pub_out_.publish(msg_out);
         }
     }
