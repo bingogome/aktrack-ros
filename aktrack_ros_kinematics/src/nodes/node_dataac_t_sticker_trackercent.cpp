@@ -87,7 +87,7 @@ private:
             run_flag_ = false;
             SaveAcquiredData();
             v_data_sticker_strackercent_.clear();
-            ROS_GREEN_STREAM("[AKTRACK INFO] Data recording started."); 
+            ROS_GREEN_STREAM("[AKTRACK INFO] Data recording ended."); 
         }
         else if (v_subjtimetrial.size()==3)
         {
@@ -98,7 +98,7 @@ private:
                 subjname_ = v_subjtimetrial[1];
                 trialname_ = v_subjtimetrial[2];
                 run_flag_ = true;
-                ROS_GREEN_STREAM("[AKTRACK INFO] Data recording ended."); 
+                ROS_GREEN_STREAM("[AKTRACK INFO] Data recording started."); 
             }
         }
     }
