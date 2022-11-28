@@ -106,6 +106,7 @@ int main(int argc, char **argv)
                 * tr_pol_trackerref_ * tr_trackerref_trackercent_;
             tr_sticker_trackercent = ConvertToGeometryPose(tr_sticker_trackercent_);
             t_sticker_trackercent.point = tr_sticker_trackercent.position;
+            t_sticker_trackercent.header.stamp = ros::Time::now();
             pub_sticker_trackercent.publish(t_sticker_trackercent);
         }
         ros::spinOnce();
