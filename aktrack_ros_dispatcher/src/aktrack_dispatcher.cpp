@@ -44,12 +44,14 @@ void Dispatcher::VisualizationCallBack(const std_msgs::String::ConstPtr& msg)
         // Poke node_viz_tr_body_tool
         msg_out.data = "_start__";
         pub_flag_viz_.publish(msg_out);
+        ros::spinOnce();
     }
     else if(msg->data.compare("_end__")==0) 
     {
         // Poke node_viz_tr_body_tool
         msg_out.data = "_end__";
         pub_flag_viz_.publish(msg_out);
+        ros::spinOnce();
     }
     
 }
@@ -62,12 +64,14 @@ void Dispatcher::TrialsCallBack(const std_msgs::String::ConstPtr& msg)
         // Poke node_viz_tr_body_tool
         msg_out.data = msg->data.substr(5);
         pub_flag_trial_.publish(msg_out);
+        ros::spinOnce();
     }
     else if(msg->data.compare("_end__")==0) 
     {
         // Poke node_viz_tr_body_tool
         msg_out.data = "_end__";
         pub_flag_trial_.publish(msg_out);
+        ros::spinOnce();
     }
 }
 
