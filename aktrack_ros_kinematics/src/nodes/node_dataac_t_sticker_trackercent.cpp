@@ -25,6 +25,7 @@ SOFTWARE.
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <boost/filesystem/operations.hpp>
 
 #include <ros/ros.h>
 #include <ros/package.h>
@@ -121,7 +122,12 @@ private:
             double start_time = v_data_sticker_strackercent_[0].header.stamp.toSec();
             std::ofstream f;
             std::string packpath = ros::package::getPath("aktrack_ros");
-            f.open(packpath + "/recordeddata/" + timestamp_ + "_" + subjname_ + "_" + trialname_ + ".csv");
+            std::string filename = packpath + "/recordeddata/" + timestamp_ + "_" + subjname_ + "_" + trialname_;
+            while (boost::filesystem::exists(filename + ".csv"))
+            {
+                filename = filename + "_rep";
+            }
+            f.open(filename + ".csv");
             for (int i=0; i<v_data_sticker_strackercent_.size(); i++)
             {
                 f << 
