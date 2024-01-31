@@ -38,6 +38,7 @@ target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} yaml-cpp)
 add_executable(node_calibration_data src/nodes/node_calibration_data.cpp)
 target_link_libraries(node_calibration_data ${PROJECT_NAME})
 
+# Polaris
 add_executable(node_dataac_t_sticker_trackercent src/nodes/node_dataac_t_sticker_trackercent.cpp)
 target_link_libraries(node_dataac_t_sticker_trackercent ${PROJECT_NAME})
 
@@ -46,3 +47,13 @@ target_link_libraries(node_t_sticker_trackercent ${PROJECT_NAME})
 
 add_executable(node_viz_t_sticker_trackercent src/nodes/node_viz_t_sticker_trackercent.cpp)
 target_link_libraries(node_viz_t_sticker_trackercent ${PROJECT_NAME})
+
+# Joystick
+add_executable(node_dataac_t_joystick src/nodes/node_dataac_t_joystick.cpp)
+target_link_libraries(node_dataac_t_joystick ${PROJECT_NAME})
+
+add_executable(node_t_joystick src/nodes/node_t_joystick.cpp)
+target_link_libraries(node_t_joystick ${PROJECT_NAME})
+
+add_executable(node_viz_t_joystick src/nodes/node_viz_t_joystick.cpp)
+target_link_libraries(node_viz_t_joystick ${PROJECT_NAME})

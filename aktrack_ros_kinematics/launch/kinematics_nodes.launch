@@ -1,6 +1,15 @@
-<launch>
+<!-- Polaris -->
+
+<!-- <launch>
     <node name="node_calibration_data" pkg="aktrack_ros_kinematics" type="node_calibration_data" output="screen"/>
     <node name="node_t_sticker_trackercent" pkg="aktrack_ros_kinematics" type="node_t_sticker_trackercent" output="screen"/>
     <node name="node_dataac_t_sticker_trackercent" pkg="aktrack_ros_kinematics" type="node_dataac_t_sticker_trackercent" output="screen"/>
     <node name="node_viz_t_sticker_trackercent" pkg="aktrack_ros_kinematics" type="node_viz_t_sticker_trackercent" output="screen"/>
+</launch> -->
+
+<!-- Joystick -->
+<launch>
+    <node name="node_t_joystick" pkg="aktrack_ros_kinematics" type="node_t_joystick" output="screen"/>
+    <node name="node_dataac_t_joystick" pkg="aktrack_ros_kinematics" type="node_dataac_t_joystick" output="screen"/>
+    <node name="node_viz_t_joystick" pkg="aktrack_ros_kinematics" type="node_viz_t_joystick" output="screen"/>
 </launch>

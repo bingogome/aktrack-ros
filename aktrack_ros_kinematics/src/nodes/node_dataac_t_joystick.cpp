@@ -48,12 +48,12 @@ std::vector<std::string> SubString(std::string s, std::string del = "_")
     return ans;
 }
 
-class MngrDataAcTStickerTrackercent
+class MngrDataAcTJoystick
 {
 // Manages the flag of running the data acquisition of the transform
 public:
     
-    MngrDataAcTStickerTrackercent(ros::NodeHandle& n) : n_(n){}
+    MngrDataAcTJoystick(ros::NodeHandle& n) : n_(n){}
     bool run_flag_ = false;
     std::vector<std::string> v_possible_trial_ = {
         "VPM-2-L", "VPM-2-U", "VPM-2-R", "VPM-2-D", 
@@ -65,7 +65,7 @@ public:
         "VPC-U", "VPC-D", "VPC-R", "VPC-L", 
         "VPB-hfixed", "VPB-hfree"
     };
-    std::vector<geometry_msgs::PointStamped> v_data_sticker_strackercent_;
+    std::vector<geometry_msgs::PointStamped> v_data_joystick_;
     std::string timestamp_;
     std::string subjname_;
     std::string trialname_;
@@ -75,10 +75,10 @@ private:
     ros::NodeHandle& n_;
     ros::Subscriber sub_run_ = n_.subscribe(
         "/AK/Kinematics/Flag_trial", 2, 
-        &MngrDataAcTStickerTrackercent::FlagCallBack, this);
-    ros::Subscriber sub_sticker_trackercent_ = n_.subscribe(
-        "/AK/Kinematics/T_sticker_trackercent", 2, 
-        &MngrDataAcTStickerTrackercent::StickerTrackercentCallBack, this);
+        &MngrDataAcTJoystick::FlagCallBack, this);
+    ros::Subscriber sub_joystick_ = n_.subscribe(
+        "/AK/Kinematics/T_joystick", 2, 
+        &MngrDataAcTJoystick::JoystickCallBack, this);
     
     void FlagCallBack(const std_msgs::String::ConstPtr& msg)
     {
@@ -87,7 +87,7 @@ private:
         {
             run_flag_ = false;
             SaveAcquiredData();
-            v_data_sticker_strackercent_.clear();
+            v_data_joystick_.clear();
             ROS_GREEN_STREAM("[AKTRACK INFO] Data recording ended."); 
         }
         else if (v_subjtimetrial.size()==3)
@@ -104,22 +104,22 @@ private:
         }
     }
 
-    void StickerTrackercentCallBack(const geometry_msgs::PointStamped::ConstPtr& msg)
+    void JoystickCallBack(const geometry_msgs::PointStamped::ConstPtr& msg)
     {
         if (run_flag_)
         {
-            geometry_msgs::PointStamped t_sticker_trackercent;
-            t_sticker_trackercent.header = msg->header;
-            t_sticker_trackercent.point = msg->point;
-            v_data_sticker_strackercent_.push_back(t_sticker_trackercent);
+            geometry_msgs::PointStamped t_joystick;
+            t_joystick.header = msg->header;
+            t_joystick.point = msg->point;
+            v_data_joystick_.push_back(t_joystick);
         }
     }
 
     void SaveAcquiredData()
     {
-        if (v_data_sticker_strackercent_.size() > 0)
+        if (v_data_joystick_.size() > 0)
         {
-            double start_time = v_data_sticker_strackercent_[0].header.stamp.toSec();
+            double start_time = v_data_joystick_[0].header.stamp.toSec();
             std::ofstream f;
             std::string packpath = ros::package::getPath("aktrack_ros");
             std::string filename = packpath + "/recordeddata/" + timestamp_ + "_" + subjname_ + "_" + trialname_;
@@ -128,13 +128,13 @@ private:
                 filename = filename + "_rep";
             }
             f.open(filename + ".csv");
-            for (int i=0; i<v_data_sticker_strackercent_.size(); i++)
+            for (int i=0; i<v_data_joystick_.size(); i++)
             {
                 f << 
-                    std::to_string(v_data_sticker_strackercent_[i].header.stamp.toSec()-start_time)
-                    << "," << std::to_string(v_data_sticker_strackercent_[i].point.x) 
-                    << "," << std::to_string(v_data_sticker_strackercent_[i].point.y) 
-                    << "," << std::to_string(v_data_sticker_strackercent_[i].point.z)
+                    std::to_string(v_data_joystick_[i].header.stamp.toSec()-start_time)
+                    << "," << std::to_string(v_data_joystick_[i].point.x) 
+                    << "," << std::to_string(v_data_joystick_[i].point.y) 
+                    << "," << std::to_string(v_data_joystick_[i].point.z)
                     << "\n";
             }
             f.close();
@@ -146,11 +146,11 @@ private:
 int main(int argc, char **argv)
 {
     // ROS stuff
-    ros::init(argc, argv, "NodeDataAcTStickerTracker");
+    ros::init(argc, argv, "NodeDataAcTJoystick");
     ros::NodeHandle nh;
 
     // Instantiate the flag manager
-    MngrDataAcTStickerTrackercent mngr1(nh);
+    MngrDataAcTJoystick mngr1(nh);
 
     // Go in the loop, with the flag indicating wether do the calculation or not
     ros::spin();
