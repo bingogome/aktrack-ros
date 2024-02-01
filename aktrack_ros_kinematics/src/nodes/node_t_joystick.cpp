@@ -27,6 +27,7 @@ SOFTWARE.
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/PointStamped.h>
 #include <geometry_msgs/Pose.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <tf2/LinearMath/Transform.h>
 
@@ -39,17 +40,17 @@ public:
     MngrTJoystick(ros::NodeHandle& n) : n_(n){}
     bool run_flag = false;
 
-    TODO tf2::Transform tr_joystick_;
+    geometry_msgs::Pose tr_joystick_;
 
 private:
 
     ros::NodeHandle& n_;
     ros::Subscriber sub_tr_joystick_ = n_.subscribe(
-        "TODO", 2, &MngrTJoystick::JoystickCallBack, this);
+        "/JOY/LeftHandle/Pose", 2, &MngrTJoystick::JoystickCallBack, this);
 
-    void JoystickCallBack(const geometry_msgs::TransformStamped::ConstPtr& msg)
+    void JoystickCallBack(const geometry_msgs::PoseStamped::ConstPtr& msg)
     {
-        tr_joystick_ = ConvertToTf2Transform(msg);
+        tr_joystick_ = msg->pose;
     }
 
 };
@@ -64,9 +65,6 @@ int main(int argc, char **argv)
     // Instantiate the flag manager
     MngrTJoystick mngr1(nh);
 
-    // Initialize the result transform
-    tf2::Transform tr_joystick_;
-
     // Initialize the result variable and its publisher
     geometry_msgs::Pose tr_joystick;
     geometry_msgs::PointStamped t_joystick;
@@ -79,8 +77,7 @@ int main(int argc, char **argv)
     {
         if (mngr1.run_flag)
         {
-            tr_joystick_ = mngr1.tr_joystick_;
-            tr_joystick = ConvertToGeometryPose(tr_joystick_);
+            tr_joystick = mngr1.tr_joystick_;
 
             t_joystick.point = tr_joystick.position;
             t_joystick.header.stamp = ros::Time::now();
